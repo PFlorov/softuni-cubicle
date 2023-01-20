@@ -7,6 +7,8 @@ const setUpViewEngine = require("./config/viewEngine");
 const app = express();
 setUpViewEngine(app);
 
+app.use(express.static("src/public"));
+
 app.get("/", function (req, res) {
   res.render("Home");
 });
