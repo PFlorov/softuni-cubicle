@@ -1,4 +1,4 @@
-const { findById } = require("../models/Cube");
+const { findById, populate } = require("../models/Cube");
 const Cube = require("../models/Cube");
 const Accessory = require("../models/Accessory");
 exports.getCreateCube = (req, res) => {
@@ -14,11 +14,13 @@ exports.postCreateCube = async (req, res) => {
 };
 
 exports.getDetails = async (req, res) => {
-  const cube = await Cube.findById(req.params.cubeId).lean();
+  const cube = await Cube.findById(req.params.cubeId)
+    .populate("accessories")
+    .lean();
   if (!cube) {
     res.redirect("/404");
   }
-  res.render("details", { cube });
+  res.render("cube/details", { cube });
 };
 
 exports.getAttachAccessory = async (req, res) => {
