@@ -12,7 +12,13 @@ exports.getCreateCube = (req, res) => {
 exports.postCreateCube = async (req, res) => {
   const { name, description, imageUrl, difficultyLevel } = req.body;
 
-  let cube = new Cube({ name, description, imageUrl, difficultyLevel });
+  let cube = new Cube({
+    name,
+    description,
+    imageUrl,
+    difficultyLevel,
+    owner: req.user._id,
+  });
   await cube.save();
   res.redirect("/");
 };
@@ -24,7 +30,8 @@ exports.getDetails = async (req, res) => {
   if (!cube) {
     res.redirect("/404");
   }
-  res.render("cube/details", { cube });
+  const isOwner = cubeUtils.isOwner(req.user, cube);
+  res.render("cube/details", { cube, isOwner });
 };
 
 exports.getAttachAccessory = async (req, res) => {
@@ -48,6 +55,9 @@ exports.getEditCube = async (req, res) => {
   const difficultyLevels = cubeUtils.generateDifficultyLevels(
     cube.difficultyLevel
   );
+  if (!cubeUtils.isOwner(req.user, cube)) {
+    return res.redirect("/404");
+  }
   res.render("cube/edit", { cube, difficultyLevels });
 };
 
