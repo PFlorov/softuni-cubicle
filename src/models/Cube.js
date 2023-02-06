@@ -15,7 +15,7 @@ const cubeSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function (value) {
-        return value.startWith("http://") || value.startWith("https://");
+        return value.startsWith("http://") || value.startsWith("https://");
       },
       message: "Please enter a valid URL",
     },
