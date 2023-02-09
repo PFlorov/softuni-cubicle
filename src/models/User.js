@@ -5,12 +5,15 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    minLength: 3,
+    minLength: [5, "Username is too short!"],
+    unique: true,
+    validate: /^[a-zA-Z0-9]+$/,
   },
   password: {
     type: String,
     required: true,
-    minLength: 6,
+    minLength: [8, "Password too short!"],
+    validate: /^[a-zA-Z0-9]+$/,
   },
 });
 
